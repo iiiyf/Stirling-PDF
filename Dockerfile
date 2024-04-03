@@ -1,5 +1,5 @@
 # Main stage
-FROM alpine:3.19.1
+FROM alpine:20240329
 
 # Copy necessary files
 COPY scripts /scripts
@@ -33,9 +33,12 @@ RUN echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/main" | tee -a /et
         curl \
         openjdk17-jre \
         su-exec \
+        font-noto-cjk \
         shadow \
 # Doc conversion
         libreoffice@testing \
+# pdftohtml
+        poppler-utils \
 # OCR MY PDF (unpaper for descew and other advanced featues)
         ocrmypdf \
         tesseract-ocr-data-eng \
