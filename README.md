@@ -5,12 +5,13 @@
 [![Discord](https://img.shields.io/discord/1068636748814483718?label=Discord)](https://discord.gg/Cn8pWhQRxZ)
 [![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/frooodle/s-pdf/latest)](https://github.com/Stirling-Tools/Stirling-PDF/)
 [![GitHub Repo stars](https://img.shields.io/github/stars/stirling-tools/stirling-pdf?style=social)](https://github.com/Stirling-Tools/stirling-pdf)
-[![Paypal Donate](https://img.shields.io/badge/Paypal%20Donate-yellow?style=flat&logo=paypal)](https://www.paypal.com/paypalme/froodleplex)
+[![Paypal Donate](https://img.shields.io/badge/Paypal%20Donate-yellow?style=flat&logo=paypal)](https://www.paypal.com/donate/?hosted_button_id=MN7JPG5G6G3JL)
 [![Github Sponsor](https://img.shields.io/badge/Github%20Sponsor-yellow?style=flat&logo=github)](https://github.com/sponsors/Frooodle)
 
 [![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/Stirling-Tools/Stirling-PDF/tree/digitalOcean&refcode=c3210994b1af)
+[<img src="https://www.ssdnodes.com/wp-content/uploads/2023/11/footer-logo.svg" alt="Name" height="40">](https://www.ssdnodes.com/manage/aff.php?aff=2216&register=true)
 
-This is a robust, locally hosted web-based PDF manipulation tool using Docker. It enables you to carry out various operations on PDF files, including splitting, merging, converting, reorganizing, adding images, rotating, compressing, and more. Originally developed entirely by ChatGPT, this locally hosted web application has evolved to encompass a comprehensive set of features, addressing all your PDF requirements.
+This is a robust, locally hosted web-based PDF manipulation tool using Docker. It enables you to carry out various operations on PDF files, including splitting, merging, converting, reorganizing, adding images, rotating, compressing, and more. This locally hosted web application has evolved to encompass a comprehensive set of features, addressing all your PDF requirements.
 
 Stirling PDF does not initiate any outbound calls for record-keeping or tracking purposes.
 
@@ -82,7 +83,8 @@ All files and PDFs exist either exclusively on the client side, reside in server
 - Get all information on a PDF to view or export as JSON.
 
 For a overview of the tasks and the technology each uses please view [Endpoint-groups.md](https://github.com/Stirling-Tools/Stirling-PDF/blob/main/Endpoint-groups.md)
-Demo of the app is available [here](https://stirlingpdf.io). username: demo, password: demo
+
+Demo of the app is available [here](https://stirlingpdf.io).
 
 ## Technologies used
 
@@ -105,32 +107,36 @@ Please view https://github.com/Stirling-Tools/Stirling-PDF/blob/main/LocalRunGui
 
 https://hub.docker.com/r/frooodle/s-pdf
 
-Stirling PDF has 2 different versions, a Full version and ultra-Lite version. Depending on the types of features you use you may want a smaller image to save on space.
+Stirling PDF has 3 different versions, a Full version and ultra-Lite version as well as a 'Fat' version. Depending on the types of features you use you may want a smaller image to save on space.
 To see what the different versions offer please look at our [version mapping](https://github.com/Stirling-Tools/Stirling-PDF/blob/main/Version-groups.md)
 For people that don't mind about space optimization just use the latest tag.
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/frooodle/s-pdf/latest?label=Stirling-PDF%20Full)
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/frooodle/s-pdf/latest-ultra-lite?label=Stirling-PDF%20Ultra-Lite)
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/frooodle/s-pdf/latest-fat?label=Stirling-PDF%20Fat)
 
-Docker Run
+Please note in below examples you may need to change the volume paths as needed, current examples install them to the current working directory
+eg ``./extraConfigs:/configs`` to ``/opt/stirlingpdf/extraConfigs:/configs``
+
+### Docker Run
 
 ```bash
 docker run -d \
   -p 8080:8080 \
-  -v /location/of/trainingData:/usr/share/tessdata \
-  -v /location/of/extraConfigs:/configs \
-  -v /location/of/logs:/logs \
+  -v ./trainingData:/usr/share/tessdata \
+  -v ./extraConfigs:/configs \
+  -v ./logs:/logs \
   -e DOCKER_ENABLE_SECURITY=false \
   -e INSTALL_BOOK_AND_ADVANCED_HTML_OPS=false \
+  -e LANGS=en_GB \
   --name stirling-pdf \
   frooodle/s-pdf:latest
-
 
   Can also add these for customisation but are not required
 
   -v /location/of/customFiles:/customFiles \
 ```
 
-Docker Compose
+### Docker Compose
 
 ```yaml
 version: '3.3'
@@ -140,13 +146,14 @@ services:
     ports:
       - '8080:8080'
     volumes:
-      - /location/of/trainingData:/usr/share/tessdata #Required for extra OCR languages
-      - /location/of/extraConfigs:/configs
-#      - /location/of/customFiles:/customFiles/
-#      - /location/of/logs:/logs/
+      - ./trainingData:/usr/share/tessdata #Required for extra OCR languages
+      - ./extraConfigs:/configs
+#      - ./customFiles:/customFiles/
+#      - ./logs:/logs/
     environment:
       - DOCKER_ENABLE_SECURITY=false
       - INSTALL_BOOK_AND_ADVANCED_HTML_OPS=false
+      - LANGS=en_GB
 ```
 
 Note: Podman is CLI-compatible with Docker, so simply replace "docker" with "podman".
@@ -157,37 +164,42 @@ Please view https://github.com/Stirling-Tools/Stirling-PDF/blob/main/HowToUseOCR
 
 ## Supported Languages
 
-Stirling PDF currently supports 27!
+Stirling PDF currently supports 32!
 
 | Language                                    | Progress                               |
 | ------------------------------------------- | -------------------------------------- |
 | English (English) (en_GB)                   | ![100%](https://geps.dev/progress/100) |
 | English (US) (en_US)                        | ![100%](https://geps.dev/progress/100) |
-| Arabic (العربية) (ar_AR)                    | ![58%](https://geps.dev/progress/58)   |
-| German (Deutsch) (de_DE)                    | ![95%](https://geps.dev/progress/95)   |
-| French (Français) (fr_FR)                   | ![94%](https://geps.dev/progress/94)   |
-| Spanish (Español) (es_ES)                   | ![95%](https://geps.dev/progress/95)   |
-| Simplified Chinese (简体中文) (zh_CN)       | ![99%](https://geps.dev/progress/99)   |
-| Traditional Chinese (繁體中文) (zh_TW)      | ![97%](https://geps.dev/progress/97)   |
-| Catalan (Català) (ca_CA)                    | ![65%](https://geps.dev/progress/65)   |
-| Italian (Italiano) (it_IT)                  | ![98%](https://geps.dev/progress/98)   |
-| Swedish (Svenska) (sv_SE)                   | ![58%](https://geps.dev/progress/58)   |
-| Polish (Polski) (pl_PL)                     | ![60%](https://geps.dev/progress/60)   |
-| Romanian (Română) (ro_RO)                   | ![58%](https://geps.dev/progress/58)   |
-| Korean (한국어) (ko_KR)                     | ![92%](https://geps.dev/progress/92)   |
-| Portuguese Brazilian (Português) (pt_BR)    | ![74%](https://geps.dev/progress/74)   |
-| Russian (Русский) (ru_RU)                   | ![92%](https://geps.dev/progress/92)   |
-| Basque (Euskara) (eu_ES)                    | ![76%](https://geps.dev/progress/76)   |
+| Arabic (العربية) (ar_AR)                    | ![46%](https://geps.dev/progress/46)   |
+| German (Deutsch) (de_DE)                    | ![99%](https://geps.dev/progress/99)   |
+| French (Français) (fr_FR)                   | ![93%](https://geps.dev/progress/93)   |
+| Spanish (Español) (es_ES)                   | ![93%](https://geps.dev/progress/93)   |
+| Simplified Chinese (简体中文) (zh_CN)       | ![94%](https://geps.dev/progress/94)   |
+| Traditional Chinese (繁體中文) (zh_TW)      | ![98%](https://geps.dev/progress/98)   |
+| Catalan (Català) (ca_CA)                    | ![49%](https://geps.dev/progress/49)   |
+| Italian (Italiano) (it_IT)                  | ![99%](https://geps.dev/progress/99)   |
+| Swedish (Svenska) (sv_SE)                   | ![40%](https://geps.dev/progress/40)   |
+| Polish (Polski) (pl_PL)                     | ![92%](https://geps.dev/progress/92)   |
+| Romanian (Română) (ro_RO)                   | ![39%](https://geps.dev/progress/39)   |
+| Korean (한국어) (ko_KR)                     | ![86%](https://geps.dev/progress/86)   |
+| Portuguese Brazilian (Português) (pt_BR)    | ![61%](https://geps.dev/progress/61)   |
+| Portuguese (Português) (pt_PT)              | ![80%](https://geps.dev/progress/80)   |
+| Russian (Русский) (ru_RU)                   | ![86%](https://geps.dev/progress/86)   |
+| Basque (Euskara) (eu_ES)                    | ![63%](https://geps.dev/progress/63)   |
 | Japanese (日本語) (ja_JP)                   | ![92%](https://geps.dev/progress/92)   |
-| Dutch (Nederlands) (nl_NL)                  | ![92%](https://geps.dev/progress/92)   |
-| Greek (Ελληνικά) (el_GR)                    | ![77%](https://geps.dev/progress/77)   |
-| Turkish (Türkçe) (tr_TR)                    | ![99%](https://geps.dev/progress/99)   |
-| Indonesia (Bahasa Indonesia) (id_ID)        | ![87%](https://geps.dev/progress/87)   |
-| Hindi (हिंदी) (hi_IN)                          | ![88%](https://geps.dev/progress/88)   |
-| Hungarian (Magyar) (hu_HU)                  | ![87%](https://geps.dev/progress/87)   |
-| Bulgarian (Български) (bg_BG)               | ![82%](https://geps.dev/progress/82)   |
-| Sebian Latin alphabet (Srpski) (sr_LATN_RS) | ![89%](https://geps.dev/progress/89)   |
-| Ukrainian (Українська) (uk_UA)              | ![98%](https://geps.dev/progress/98)   |
+| Dutch (Nederlands) (nl_NL)                  | ![98%](https://geps.dev/progress/98)   |
+| Greek (Ελληνικά) (el_GR)                    | ![84%](https://geps.dev/progress/84)   |
+| Turkish (Türkçe) (tr_TR)                    | ![96%](https://geps.dev/progress/96)   |
+| Indonesia (Bahasa Indonesia) (id_ID)        | ![78%](https://geps.dev/progress/78)   |
+| Hindi (हिंदी) (hi_IN)                          | ![78%](https://geps.dev/progress/78)   |
+| Hungarian (Magyar) (hu_HU)                  | ![77%](https://geps.dev/progress/77)   |
+| Bulgarian (Български) (bg_BG)               | ![96%](https://geps.dev/progress/96)   |
+| Sebian Latin alphabet (Srpski) (sr_LATN_RS) | ![80%](https://geps.dev/progress/80)   |
+| Ukrainian (Українська) (uk_UA)              | ![92%](https://geps.dev/progress/92)   |
+| Slovakian (Slovensky) (sk_SK)               | ![93%](https://geps.dev/progress/93)   |
+| Czech (Česky) (cs_CZ)                       | ![92%](https://geps.dev/progress/92)   |
+| Croatian (Hrvatski) (hr_HR)                 | ![97%](https://geps.dev/progress/97)   |
+| Norwegian (Norsk) (no_NB)                   | ![97%](https://geps.dev/progress/97)   |
 
 ## Contributing (creating issues, translations, fixing bugs, etc.)
 
@@ -199,7 +211,7 @@ Stirling PDF allows easy customization of the app.
 Includes things like
 
 - Custom application name
-- Custom slogans, icons, images, and even custom HTML (via file overrides)
+- Custom slogans, icons, HTML, images CSS etc (via file overrides) 
 
 There are two options for this, either using the generated settings file ``settings.yml``
 This file is located in the ``/configs`` directory and follows standard YAML formatting
@@ -208,36 +220,72 @@ Environment variables are also supported and would override the settings file
 For example in the settings.yml you have
 
 ```yaml
-system:
-  defaultLocale: 'en-US'
+security:
+  enableLogin: 'true'
 ```
 
-To have this via an environment variable you would have ``SYSTEM_DEFAULTLOCALE``
+To have this via an environment variable you would have ``SECURITY_ENABLELOGIN``
 
 The Current list of settings is
 
 ```yaml
 security:
   enableLogin: false # set to 'true' to enable login
-  csrfDisabled: true
+  csrfDisabled: true # Set to 'true' to disable CSRF protection (not recommended for production)
+  loginAttemptCount: 5 # lock user account after 5 tries
+  loginResetTimeMinutes: 120 # lock account for 2 hours after x attempts
+#  initialLogin:
+#    username: "admin" # Initial username for the first login
+#    password: "stirling" # Initial password for the first login
+#  oauth2:
+#    enabled: false # set to 'true' to enable login (Note: enableLogin must also be 'true' for this to work)
+#    issuer: "" # set to any provider that supports OpenID Connect Discovery (/.well-known/openid-configuration) end-point
+#    clientId: "" # Client ID from your provider
+#    clientSecret: "" # Client Secret from your provider
+#    autoCreateUser: false # set to 'true' to allow auto-creation of non-existing users
+#    useAsUsername: "email" # Default is 'email'; custom fields can be used as the username
+#    scopes: "openid, profile, email" # Specify the scopes for which the application will request permissions
+#    provider: "google" # Set this to your OAuth provider's name, e.g., 'google' or 'keycloak'
+#    client:
+#      google:
+#        clientId: "" # Client ID for Google OAuth2
+#        clientSecret: "" # Client Secret for Google OAuth2
+#        scopes: "https://www.googleapis.com/auth/userinfo.email, https://www.googleapis.com/auth/userinfo.profile" # Scopes for Google OAuth2
+#        useAsUsername: "email" # Field to use as the username for Google OAuth2
+#      github:
+#        clientId: "" # Client ID for GitHub OAuth2
+#        clientSecret: "" # Client Secret for GitHub OAuth2
+#        scopes: "read:user" # Scope for GitHub OAuth2
+#        useAsUsername: "login" # Field to use as the username for GitHub OAuth2
+#      keycloak:
+#        issuer: "http://192.168.0.123:8888/realms/stirling-pdf" # URL of the Keycloak realm's OpenID Connect Discovery endpoint
+#        clientId: "stirling-pdf" # Client ID for Keycloak OAuth2
+#        clientSecret: "" # Client Secret for Keycloak OAuth2
+#        scopes: "openid, profile, email" # Scopes for Keycloak OAuth2
+#        useAsUsername: "email" # Field to use as the username for Keycloak OAuth2
 
 system:
   defaultLocale: 'en-US' # Set the default language (e.g. 'de-DE', 'fr-FR', etc)
   googlevisibility: false # 'true' to allow Google visibility (via robots.txt), 'false' to disallow
-  customStaticFilePath: '/customFiles/static/' # Directory path for custom static files
+  enableAlphaFunctionality: false # Set to enable functionality which might need more testing before it fully goes live (This feature might make no changes)
+  showUpdate: true # see when a new update is available
+  showUpdateOnlyAdmin: false # Only admins can see when a new update is available, depending on showUpdate it must be set to 'true'
+  customHTMLFiles: false # enable to have files placed in /customFiles/templates override the existing template html files
 
-#ui:
-#  appName: exampleAppName # Application's visible name
-#  homeDescription: I am a description # Short description or tagline shown on homepage.
-#  appNameNavbar: navbarName # Name displayed on the navigation bar
+ui:
+  appName: null # Application's visible name
+  homeDescription: null # Short description or tagline shown on homepage.
+  appNameNavbar: null # Name displayed on the navigation bar
 
 endpoints:
   toRemove: [] # List endpoints to disable (e.g. ['img-to-pdf', 'remove-pages'])
   groupsToRemove: [] # List groups to disable (e.g. ['LibreOffice'])
 
 metrics:
-  enabled: true # 'true' to enable Info APIs endpoints (view http://localhost:8080/swagger-ui/index.html#/API to learn more), 'false' to disable
+  enabled: true # 'true' to enable Info APIs (`/api/*`) endpoints, 'false' to disable
 ```
+
+There is an additional config file ``/configs/custom_settings.yml`` were users familiar with java and spring application.properties can input their own settings on-top of Stirling-PDFs existing ones
 
 ### Extra notes
 
@@ -250,12 +298,12 @@ metrics:
 - ``SYSTEM_CONNECTIONTIMEOUTMINUTES`` to set custom connection timeout values
 - ``DOCKER_ENABLE_SECURITY`` to tell docker to download security jar (required as true for auth login)
 - ``INSTALL_BOOK_AND_ADVANCED_HTML_OPS`` to download calibre onto stirling-pdf enabling pdf to/from book and advanced html conversion
+- ``LANGS`` to define custom font libraries to install for use for document conversions
 
 ## API
 
 For those wanting to use Stirling-PDFs backend API to link with their own custom scripting to edit PDFs you can view all existing API documentation
 [here](https://app.swaggerhub.com/apis-docs/Stirling-Tools/Stirling-PDF/) or navigate to /swagger-ui/index.html of your stirling-pdf instance for your versions documentation (Or by following the API button in your settings of Stirling-PDF)
-
 
 ## Login authentication
 
@@ -264,7 +312,7 @@ For those wanting to use Stirling-PDFs backend API to link with their own custom
 ### Prerequisites:
 
 - User must have the folder ./configs volumed within docker so that it is retained during updates.
-- Docker uses must download the security jar version by setting ``DOCKER_ENABLE_SECURITY`` to ``true`` in environment variables.
+- Docker users must download the security jar version by setting ``DOCKER_ENABLE_SECURITY`` to ``true`` in environment variables.
 - Then either enable login via the settings.yml file or via setting ``SECURITY_ENABLE_LOGIN`` to ``true``
 - Now the initial user will be generated with username ``admin`` and password ``stirling``. On login you will be forced to change the password to a new one. You can also use the environment variables ``SECURITY_INITIALLOGIN_USERNAME`` and  ``SECURITY_INITIALLOGIN_PASSWORD`` to set your own straight away (Recommended to remove them after user creation).
 

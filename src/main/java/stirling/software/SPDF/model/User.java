@@ -16,6 +16,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -47,12 +48,16 @@ public class User {
     @Column(name = "roleName")
     private String roleName;
 
+    @Column(name = "authenticationtype")
+    private String authenticationType;
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authority> authorities = new HashSet<>();
 
     @ElementCollection
     @MapKeyColumn(name = "setting_key")
-    @Column(name = "setting_value")
+    @Lob
+    @Column(name = "setting_value", columnDefinition = "CLOB")
     @CollectionTable(name = "user_settings", joinColumns = @JoinColumn(name = "user_id"))
     private Map<String, String> settings = new HashMap<>(); // Key-value pairs of settings.
 
@@ -116,6 +121,14 @@ public class User {
         this.enabled = enabled;
     }
 
+    public void setAuthenticationType(AuthenticationType authenticationType) {
+        this.authenticationType = authenticationType.toString().toLowerCase();
+    }
+
+    public String getAuthenticationType() {
+        return authenticationType;
+    }
+
     public Set<Authority> getAuthorities() {
         return authorities;
     }
@@ -136,5 +149,9 @@ public class User {
         return this.authorities.stream()
                 .map(Authority::getAuthority)
                 .collect(Collectors.joining(", "));
+    }
+
+    public boolean hasPassword() {
+        return this.password != null && !this.password.isEmpty();
     }
 }

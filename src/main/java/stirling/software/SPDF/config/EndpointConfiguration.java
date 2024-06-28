@@ -116,6 +116,7 @@ public class EndpointConfiguration {
         addEndpointToGroup("Security", "change-permissions");
         addEndpointToGroup("Security", "add-watermark");
         addEndpointToGroup("Security", "cert-sign");
+        addEndpointToGroup("Security", "remove-cert-sign");
         addEndpointToGroup("Security", "sanitize-pdf");
         addEndpointToGroup("Security", "auto-redact");
 
@@ -146,7 +147,6 @@ public class EndpointConfiguration {
         addEndpointToGroup("CLI", "xlsx-to-pdf");
         addEndpointToGroup("CLI", "pdf-to-word");
         addEndpointToGroup("CLI", "pdf-to-presentation");
-        addEndpointToGroup("CLI", "pdf-to-text");
         addEndpointToGroup("CLI", "pdf-to-html");
         addEndpointToGroup("CLI", "pdf-to-xml");
         addEndpointToGroup("CLI", "ocr-pdf");
@@ -154,6 +154,7 @@ public class EndpointConfiguration {
         addEndpointToGroup("CLI", "url-to-pdf");
         addEndpointToGroup("CLI", "book-to-pdf");
         addEndpointToGroup("CLI", "pdf-to-book");
+        addEndpointToGroup("CLI", "pdf-to-rtf");
 
         // Calibre
         addEndpointToGroup("Calibre", "book-to-pdf");
@@ -175,7 +176,7 @@ public class EndpointConfiguration {
         addEndpointToGroup("LibreOffice", "xlsx-to-pdf");
         addEndpointToGroup("LibreOffice", "pdf-to-word");
         addEndpointToGroup("LibreOffice", "pdf-to-presentation");
-        addEndpointToGroup("LibreOffice", "pdf-to-text");
+        addEndpointToGroup("LibreOffice", "pdf-to-rtf");
         addEndpointToGroup("LibreOffice", "pdf-to-html");
         addEndpointToGroup("LibreOffice", "pdf-to-xml");
 
@@ -200,6 +201,7 @@ public class EndpointConfiguration {
         addEndpointToGroup("Java", "extract-images");
         addEndpointToGroup("Java", "change-metadata");
         addEndpointToGroup("Java", "cert-sign");
+        addEndpointToGroup("Java", "remove-cert-sign");
         addEndpointToGroup("Java", "multi-page-layout");
         addEndpointToGroup("Java", "scale-pages");
         addEndpointToGroup("Java", "add-page-numbers");
@@ -218,6 +220,7 @@ public class EndpointConfiguration {
         addEndpointToGroup("Java", "overlay-pdf");
         addEndpointToGroup("Java", "split-pdf-by-sections");
         addEndpointToGroup("Java", REMOVE_BLANKS);
+        addEndpointToGroup("Java", "pdf-to-text");
 
         // Javascript
         addEndpointToGroup("Javascript", "pdf-organizer");

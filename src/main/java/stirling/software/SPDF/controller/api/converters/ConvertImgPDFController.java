@@ -6,10 +6,6 @@ import java.net.URLConnection;
 import org.apache.pdfbox.rendering.ImageType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,8 +35,8 @@ public class ConvertImgPDFController {
             summary = "Convert PDF to image(s)",
             description =
                     "This endpoint converts a PDF file to image(s) with the specified image format, color type, and DPI. Users can choose to get a single image or multiple images.  Input:PDF Output:Image Type:SI-Conditional")
-    public ResponseEntity<Resource> convertToImage(@ModelAttribute ConvertToImageRequest request)
-            throws IOException {
+    public ResponseEntity<byte[]> convertToImage(@ModelAttribute ConvertToImageRequest request)
+            throws NumberFormatException, Exception {
         MultipartFile file = request.getFileInput();
         String imageFormat = request.getImageFormat();
         String singleOrMultiple = request.getSingleOrMultiple();
@@ -60,38 +56,27 @@ public class ConvertImgPDFController {
         String filename =
                 Filenames.toSimpleFileName(file.getOriginalFilename())
                         .replaceFirst("[.][^.]+$", "");
-        try {
-            result =
-                    PdfUtils.convertFromPdf(
-                            pdfBytes,
-                            imageFormat.toUpperCase(),
-                            colorTypeResult,
-                            singleImage,
-                            Integer.valueOf(dpi),
-                            filename);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+
+        result =
+                PdfUtils.convertFromPdf(
+                        pdfBytes,
+                        imageFormat.toUpperCase(),
+                        colorTypeResult,
+                        singleImage,
+                        Integer.valueOf(dpi),
+                        filename);
+
+        if (result == null || result.length == 0) {
+            logger.error("resultant bytes for {} is null, error converting ", filename);
         }
         if (singleImage) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.parseMediaType(getMediaType(imageFormat)));
-            ResponseEntity<Resource> response =
-                    new ResponseEntity<>(new ByteArrayResource(result), headers, HttpStatus.OK);
-            return response;
+            String docName = filename + "." + imageFormat;
+            MediaType mediaType = MediaType.parseMediaType(getMediaType(imageFormat));
+            return WebResponseUtils.bytesToWebResponse(result, docName, mediaType);
         } else {
-            ByteArrayResource resource = new ByteArrayResource(result);
-            // return the Resource in the response
-            return ResponseEntity.ok()
-                    .header(
-                            HttpHeaders.CONTENT_DISPOSITION,
-                            "attachment; filename=" + filename + "_convertedToImages.zip")
-                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                    .contentLength(resource.contentLength())
-                    .body(resource);
+            String zipFilename = filename + "_convertedToImages.zip";
+            return WebResponseUtils.bytesToWebResponse(
+                    result, zipFilename, MediaType.APPLICATION_OCTET_STREAM);
         }
     }
 
